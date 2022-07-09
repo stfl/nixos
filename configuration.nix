@@ -5,7 +5,7 @@
 { config, pkgs, ... }:
 
 let
-  user="stefan";
+  USER="stefan";
 in
 {
   imports =
@@ -63,7 +63,7 @@ in
       defaultSession = "xfce";
       # Enable automatic login for the user.
       autoLogin.enable = true;
-      autoLogin.user = "${user}";
+      autoLogin.user = "${USER}";
     };
     # Enable touchpad support (enabled default in most desktopManager)
     libinput.enable = true;
@@ -93,18 +93,13 @@ in
 
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.${user} = {
+  users.users.${USER} = {
     isNormalUser = true;
     description = "Stefan";
     extraGroups = [ "networkmanager" "wheel" "docker" ];
-    initialPassword = "password123";
+    initialPassword = "nixos";
+    shell = pkgs.zsh;
     packages = with pkgs; [
-      firefox
-      zsh
-      git
-      htop
-      wget
-      curl
       docker-compose
     ];
   };
@@ -167,9 +162,9 @@ in
 
   services.syncthing = {
     enable = true;
-    user = "${user}";
-    dataDir = "/home/${user}/syncthing";
-    configDir = "/home/${user}/.config/syncthing";
+    user = "${USER}";
+    dataDir = "/home/${USER}/syncthing";
+    configDir = "/home/${USER}/.config/syncthing";
     guiAddress = "0.0.0.0:8384";
   };
 

@@ -8,19 +8,16 @@
 
   home.packages = with pkgs; [
     emacs
-    tmux
+    firefox
     neovim
-    tmux
     ripgrep
     httpie
     plex-media-player
+
     fd
     fasd
-    lsd
-    exa
 
     xsel
-    xclip
   ];
 
   # This value determines the Home Manager release that your
@@ -33,7 +30,6 @@
   # changes in each release.
   home.stateVersion = "22.05";
 
-
   programs = {
     home-manager.enable = true;  # Let Home Manager install and manage itself.
     git = {
@@ -45,21 +41,70 @@
       enable = true;
       enableBashIntegration = true;
       enableZshIntegration = true;
+      changeDirWidgetCommand = "fd --type d";  # ALT-C
+      changeDirWidgetOptions = [ "--preview 'tree -C {} | head -200'" ];
+      defaultCommand = "fd --type f";
+      fileWidgetCommand = "fd --type f";   # CTRL-T
+      fileWidgetOptions = [ "--preview 'head {}'" ];
       tmux.enableShellIntegration = true;
     };
     starship = {
       enable = true;
-      enableBashIntegration = true;
+      # enableBashIntegration = true;
       enableZshIntegration = true;
     };
     ssh = {
       enable = true;
       forwardAgent = false;
       controlMaster = "auto";
-      includes = [
-        "~/.ssh/config.d/*"
-      ];
+      controlPersist = "10m";
+      includes = [ "${HOME}/.ssh/config.d/*" ];
     };
+    lsd = {
+      enable = true;
+      enableAliases = true;
+    };
+  };
+
+  programs.zsh = {
+    enable = true;
+    prezto = {
+      enable = true;
+      pmodules = [
+          "environment"
+          "terminal"
+          "editor"
+          "history"
+          "history-substring-search"
+          "directory"
+          "spectrum"
+          "syntax-highlighting"
+          "utility"
+          "completion"
+          "autosuggestions"
+          "archive"
+          "fasd"
+          "git"
+          "rsync"
+          # "prompt"  > starship instead
+          # "ssh"
+          # "gpg"
+        ];
+      editor = {
+        keymap = "vi";
+        dotExpansion = true;
+      };
+    };
+    initExtra = ''
+      # overwriting prezto's fasd alias j
+      unalias j
+      j() {
+        local dir
+        dir="$(fasd -Rdl "$1" | fzf-tmux -1 -0 --no-sort +m)" \
+           && cd "$dir" \
+           || return 1
+      }
+    '';
   };
 
   programs.tmux = {
