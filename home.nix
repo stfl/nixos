@@ -9,6 +9,7 @@
   home.packages = with pkgs; [
     emacs
     firefox
+    chromium
     neovim
     ripgrep
     httpie
@@ -58,8 +59,7 @@
       forwardAgent = false;
       controlMaster = "auto";
       controlPersist = "10m";
-      includes = [ "${HOME}/.ssh/config.d/*" ];
-    };
+      includes = [ "~/.ssh/config.d/*" ];};
     lsd = {
       enable = true;
       enableAliases = true;
@@ -68,6 +68,15 @@
 
   programs.zsh = {
     enable = true;
+    profileExtra = ''
+if [[ $TERM == dumb || -n $INSIDE_EMACS ]]; then
+  unsetopt zle prompt_cr prompt_subst
+  whence -w precmd >/dev/null && unfunction precmd
+  whence -w preexec >/dev/null && unfunction preexec
+  PS1='$ '
+  break
+fi
+'';
     prezto = {
       enable = true;
       pmodules = [

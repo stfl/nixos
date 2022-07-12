@@ -159,6 +159,8 @@ in
 #    };
 #  };
 
+  nix.trustedUsers = [ "root" "${USER}" ];
+
 
   services.syncthing = {
     enable = true;
