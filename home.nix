@@ -36,7 +36,7 @@
     git = {
       enable = true;
       lfs.enable = true;
-      difftastic.enable = true;
+      # difftastic.enable = true;
     };
     fzf = {
       enable = true;
@@ -54,16 +54,23 @@
       # enableBashIntegration = true;
       enableZshIntegration = true;
     };
-    ssh = {
-      enable = true;
-      forwardAgent = false;
-      controlMaster = "auto";
-      controlPersist = "10m";
-      includes = [ "~/.ssh/config.d/*" ];};
     lsd = {
       enable = true;
       enableAliases = true;
     };
+  };
+
+
+  programs.ssh = {
+    enable = true;
+    forwardAgent = false;
+    controlMaster = "auto";
+    controlPersist = "10m";
+    includes = [ "~/.ssh/config.d/*" ];
+  };
+  home.file.".ssh/config.d/" = {
+    recursive = true;
+    source = ./ssh/config.d;
   };
 
   programs.zsh = {
