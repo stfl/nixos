@@ -16,8 +16,9 @@
 
     fd
     fasd
-
     xsel
+    xclip
+    editorconfig-core-c
   ];
 
   # This value determines the Home Manager release that your
