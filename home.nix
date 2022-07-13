@@ -10,7 +10,6 @@
     emacs
     firefox
     chromium
-    neovim
     ripgrep
     httpie
     plex-media-player
@@ -33,12 +32,6 @@
 
   programs = {
     home-manager.enable = true;  # Let Home Manager install and manage itself.
-    git = {
-      enable = true;
-      lfs.enable = true;
-      difftastic.enable = true;
-      # diff-so-fancy.enable = true;
-    };
     fzf = {
       enable = true;
       enableBashIntegration = true;
@@ -58,11 +51,20 @@
       enable = true;
       enableAliases = true;
     };
-    direnv = {
-      enable = true;
-      enableZshIntegration = true;
-      nix-direnv.enable = true;
-      stdlib = ''
+  };
+
+  programs.neovim = {
+    enable = true;
+    viAlias = true;
+    vimAlias = true;
+    vimdiffAlias = true;
+  };
+
+  programs.direnv = {
+    enable = true;
+    enableZshIntegration = true;
+    nix-direnv.enable = true;
+    stdlib = ''
 layout_anaconda() {
   local ACTIVATE="$HOME/.anaconda3/bin/activate"
 
@@ -80,8 +82,45 @@ layout_anaconda() {
 }
 '';
     };
+
+  programs.mpv = {
+    enable = true;
   };
 
+  programs.git = {
+    enable = true;
+    lfs.enable = true;
+    # delta.enable = true;
+    difftastic.enable = true;
+    # diff-so-fancy.enable = true;
+    userName = "Stefan Lendl";
+    userEmail = "ste.lendl@gmail.com";
+    ignores = [ "*~" "*.swp" ];
+    aliases = {
+      a     = "add";
+      br    = "branch";
+      c     = "commit";
+      ca    = "commit -a";
+      cam   = "commit -am";
+      cl    = "clone";
+      co    = "checkout";
+      d     = "diff";
+      dt    = "difftool";
+      f     = "fetch";
+      graph = "log --graph --decorate --oneline --all";
+      gr    = "log --graph --all --pretty=format:'%Cred%h%Creset %Cgreen%ad%Creset -%C(bold cyan)%d%Creset %s %C(magenta)<%an>%Creset' --date=short";
+      h     = "help";
+      l     = "log --topo-order --pretty=format:'%C(bold)Commit:%C(reset) %C(green)%H%C(red)%d%n%C(bold)Author:%C(reset) %C(cyan)%an <%ae>%n%C(bold)Date:%C(reset)   %C(blue)%ai (%ar)%C(reset)%n%+B'";
+      lg    = "log --graph --pretty=format:'%Cred%h%Creset %Cgreen%ad%Creset -%C(bold cyan)%d%Creset %s %C(magenta)<%an>%Creset' --date=short";
+      ls    = "ls-files";
+      m     = "merge";
+      pl    = "pull";
+      pu    = "push";
+      s     = "status";
+      rb    = "rebase";
+      cp    = "cherry-pick";
+    };
+  };
 
   programs.ssh = {
     enable = true;
