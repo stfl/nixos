@@ -36,7 +36,8 @@
     git = {
       enable = true;
       lfs.enable = true;
-      # difftastic.enable = true;
+      difftastic.enable = true;
+      # diff-so-fancy.enable = true;
     };
     fzf = {
       enable = true;
@@ -51,12 +52,33 @@
     };
     starship = {
       enable = true;
-      # enableBashIntegration = true;
       enableZshIntegration = true;
     };
     lsd = {
       enable = true;
       enableAliases = true;
+    };
+    direnv = {
+      enable = true;
+      enableZshIntegration = true;
+      nix-direnv.enable = true;
+      stdlib = ''
+layout_anaconda() {
+  local ACTIVATE="$HOME/.anaconda3/bin/activate"
+
+  if [ -n "$1" ]; then
+    # Explicit environment name from layout command.
+    local env_name="$1"
+    source $ACTIVATE $env_name
+  elif (grep -q name: environment.yml); then
+    # Detect environment name from `environment.yml` file in `.envrc` directory
+    source $ACTIVATE `grep name: environment.yml | sed -e 's/name: //' | cut -d "'" -f 2 | cut -d '"' -f 2`
+  else
+    (>&2 echo No environment specified);
+    exit 1;
+  fi;
+}
+'';
     };
   };
 
@@ -66,9 +88,9 @@
     forwardAgent = false;
     controlMaster = "auto";
     controlPersist = "10m";
-    includes = [ "~/.ssh/config.d/*" ];
+    includes = [ "${config.xdg.configHome}/ssh/*" ];
   };
-  home.file.".ssh/config.d/" = {
+  xdg.configFile."ssh/" = {
     recursive = true;
     source = ./ssh/config.d;
   };
@@ -204,7 +226,7 @@ fi
   };
 
   programs.alacritty.enable = true;
-  home.file.".config/alacritty/alacritty.yml" = {
+  xdg.configFile."alacritty/alacritty.yml" = {
     source = ./alacritty.yml;
   };
 }
