@@ -7,7 +7,6 @@
   home.homeDirectory = "/home/stefan";
 
   home.packages = with pkgs; [
-    emacs
     firefox
     chromium
     ripgrep
