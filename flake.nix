@@ -38,6 +38,19 @@
               };
             }
           ];
+	};
+        trex = lib.nixosSystem {
+          inherit system;
+          modules = [
+            ./hosts/trex
+            home-manager.nixosModules.home-manager {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.users.stefan = {
+                imports = [ ./home.nix ];
+              };
+            }
+          ];
         };
       };
     };
